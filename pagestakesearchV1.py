@@ -17,7 +17,7 @@ if filename == "":
 else:
     inputFile = filename
 
-### Check to see if the ending is .epub
+### Check to see if the ending is valid
 if not inputFile.endswith(".epub"):
     print(inputFile + ' invalid name. File must be an epub')
     exit()
@@ -30,7 +30,7 @@ Exportfolder =  os.path.splitext(inputFile)[0]
 pagestakerfilename=Exportfolder
 
 ### Define search and replace regexs
-search_text = r'<span class="com-rorohiko-pagestaker-style.*?">(\d+?)</span>'
+search_text = r'<span class="com-rorohiko-pagestaker-style.*?">(\d+?|(x{0,3})(ix|iv|v?i{0,3})?)</span>'
 replace_text = lambda x:'<span epub:type="pagebreak" role="doc-pagebreak" id="page' + x.group(1) + '" title="' + x.group(1) + '" />'
 
 ### Extract files
