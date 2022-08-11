@@ -1,22 +1,37 @@
 ### Search for page-stakes and make list
+### version.001
 
-from dataclasses import replace
-import glob, os, zipfile, re
-from posixpath import curdir
+# from dataclasses import replace
+# import glob, 
+import os, zipfile, re
+# from posixpath import curdir
 from bs4 import BeautifulSoup
 
 ### Set input (TEMP) and change directory
+print('Enter epub file name (default is test.epub):')
+filename = input()
+
+
+if filename == "":
+    inputFile = "test.epub"
+else:
+    inputFile = filename
+
+### Check to see if the ending is .epub
+if not inputFile.endswith(".epub"):
+    print(inputFile + ' invalid name. File must be an epub')
+    exit()
+
 currDir = os.path.dirname(__file__)
 os.chdir(currDir)
-inputFile ="test.epub"
 
+### split out folder name from file name
 Exportfolder =  os.path.splitext(inputFile)[0]
 pagestakerfilename=Exportfolder
 
 ### Define search and replace regexs
 search_text = r'<span class="com-rorohiko-pagestaker-style.*?">(\d+?)</span>'
 replace_text = lambda x:'<span epub:type="pagebreak" role="doc-pagebreak" id="page' + x.group(1) + '" title="' + x.group(1) + '" />'
-
 
 ### Extract files
 epubFile = zipfile.ZipFile(inputFile, 'r')
