@@ -11,14 +11,20 @@ import os, zipfile, re
 from bs4 import BeautifulSoup
 
 ### Set input (TEMP) and change directory
-print('Enter epub file name (default is test.epub):')
-filename = input()
+# print('Enter epub file name (default is test.epub):')
+# filename = input()
 
 
-if filename == "":
-    inputFile = "test.epub"
-else:
-    inputFile = filename
+import sys
+try:
+    inputFile = sys.argv[1] 
+except IndexError:
+    print("No file dropped")
+
+# if filename == "":
+#     inputFile = "test.epub"
+# else:
+#     inputFile = filename
 
 ### Check to see if the ending is valid
 if not inputFile.endswith(".epub"):
@@ -41,16 +47,18 @@ epubFile = zipfile.ZipFile(inputFile, 'r')
 epubFile.extractall(inputFile[:-5])
 epubFile.close()
 
-### Get working folder and change directory
-# print (Exportfolder)
-if (os.path.isdir(Exportfolder)):
-    os.chdir(Exportfolder)
 
 ### open file
-pagestakerfile = open(currDir+"/" +pagestakerfilename +"-pagestaker.txt", "w")
+# pagestakerfile = open(currDir+"/" +pagestakerfilename +"-pagestaker.txt", "w")
+pagestakerfile = open("/" +pagestakerfilename +"-pagestaker.txt", "w")
 
 ### Write opening to file
 pagestakerfile.write('<nav epub:type="page-list" role="doc-pagelist">\n\t<ol>\n')
+
+### Get working folder and change directory
+# print (Exportfolder)
+os.chdir(Exportfolder)
+
 
 ### make some lists
 items = []
@@ -63,7 +71,6 @@ for root, dirs, files in os.walk("."):
         if file.endswith(".xhtml"):
             items.append(root + "/" + file)
 # print(items)
-
 
 ### Loop through list
 for file in items:
