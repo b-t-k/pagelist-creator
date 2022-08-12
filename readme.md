@@ -30,5 +30,12 @@ You will need to have python 3 installed. Most Macs have python 2 installed out 
 
 Put the epub file in the same location as the script. Open Terminal, type `cd ` and drag the folder into the window and hit enter to change the directory. Run the script by typing `python3 pagestakesearchV1.py` in terminal. 
 
+## Droplet version
+I added a packaged version for OSX using [sveinbjornt's platypus](https://github.com/sveinbjornt/Platypus). It still needs you to have the proper python packages installed though.
+
 # Note
-There is a Sigil plugin here [https://www.mobileread.com/forums/showthread.php?t=265237] that basically does the same thing. You simply have to edit the preferences json file to look for `com-rorohiko-pagestaker-style`. But I will keep plugging away on my own version...
+There is a Sigil plugin here [https://www.mobileread.com/forums/showthread.php?t=265237] that basically does the same thing. You simply have to edit the preferences json file to look for `com-rorohiko-pagestaker-style`. 
+
+There is also a php app [https://epubsecrets.com/droptoscript.php] (source here:[https://github.com/BCLibCoop/nnels-a11y-publishing]) that perform this job (extractor) and a number of other tasks including a cleaner and title builder.
+
+But I will keep plugging away on my own version...
