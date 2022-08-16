@@ -9,6 +9,9 @@ This python script is an attempt to fill that gap.
 - python 3
 - BeautifulSoup
 
+## V2
+Separate out into functions and add function to pull list (and print to end of text file) of all tags that have a class so I can  clean them up. I left the droplet for the old version there for now.
+
 
 # Method
 The script: 
