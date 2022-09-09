@@ -4,6 +4,7 @@
 
 # from re import RegexFlag
 import os, zipfile, re, sys
+from os.path import exists
 from bs4 import BeautifulSoup
 from pgstakerfunc import getFolder as gf
 from pgstakerfunc import extract as extr
@@ -19,31 +20,35 @@ from findlistofclasses import findlistofclassesx
 # except IndexError:
 #     print("No file dropped")
 
-# ### Check to see if the ending is valid
-# if not inputFile.endswith(".epub"):
-#     print(inputFile + ' invalid name. File must be an epub')
-#     exit()
-
-#TEMP INPUT
-inputFile = "test.epub"
-
-# USe function to extract folder name
-Exportfolder=gf(inputFile)
-print(Exportfolder)
-
-
-### Get working folder and change directory
-# if (os.path.isdir(Exportfolder)):
-#     os.chdir(Exportfolder)
-
-# directory_path = os.getcwd()
-# print(directory_path)
-
-
 ### Set  directory of file
 currDir = os.path.dirname(__file__)
 os.chdir(currDir)
 print(currDir)
+
+#TEMP INPUT
+inputFile=input("Please add file name (from test folder): ")
+
+if not inputFile:
+    inputFile = "test.epub"
+
+### Check to see if the file exists
+file_exists = os.path.exists(currDir + "/working/" + inputFile)
+if not file_exists:
+    print(inputFile + ' does not exist or is not in the test folder.')
+    exit()
+
+### Check to see if the ending is valid
+if not inputFile.endswith(".epub"):
+    print(inputFile + ' invalid name. File must be an epub')
+    exit()
+
+os.chdir("working") # change to working folder
+
+### Use function to extract folder name
+Exportfolder=gf(inputFile)
+# print(Exportfolder)
+
+
 
 ### function to extract zipped files
 extr(inputFile)
@@ -88,8 +93,8 @@ for file in items:
         uniquelist = findlistofclassesx(soup)
 
         ### run regex function
-        pgstakeregex(data)
-
+        data = pgstakeregex(data)
+    # print(data)
     with open(file, 'w') as output:
         output.write(data)
         output.close()
@@ -104,7 +109,7 @@ for inner_list in completelist:
     pagelist_item='\t\t<li><a href="' + inner_list[1] + '#page' +  str(inner_list[0]) + '">' + str(inner_list[0]) + '</a></li>\n'
     pagestakerfile.write(pagelist_item)
 
-#write end of file and close
+### write end of file and close
 pagestakerfile.write('\n\t</ol>\n</nav>\n')
 
 # TEMP WRITE OUTPUT TO FILE
@@ -114,5 +119,26 @@ for tag in uniquelist:
 
 pagestakerfile.close()
 
+# print(os.getcwd())
+
 ### Change back to top directory
 os.chdir("..")
+
+### Recompress files
+if (os.path.isdir(Exportfolder)):
+    epubFile = zipfile.ZipFile(Exportfolder + "_rev.epub", 'w', zipfile.ZIP_DEFLATED)
+    
+    os.chdir(Exportfolder)
+    
+    for root, dirs, files in os.walk("."):
+        for file in files:
+            # print(root, file)
+            epubFile.write(os.path.join(root, file))
+    epubFile.close()
+else:
+    print("wrong directory")
+
+
+### Change back to top directory
+os.chdir("..")
+# print(os.getcwd())

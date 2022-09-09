@@ -31,15 +31,17 @@ def pgstakelist(file,soup, completelist):
 
         ### remove OEBS folder from filepath
         filepath = re.sub(r'\./OEBPS/', '', file, count = 1)
-        page = pagelist.contents[0].strip()
-        # print(page,filepath)
-        if page.isdigit():
-            page=int(page)
+        # print(pagelist.contents[0])
+        if len(pagelist.contents[0]) != 0:
+            page = pagelist.contents[0].strip()
+            # print(page,filepath)
+            if page.isdigit():
+                page=int(page)
 
-        filepagelist=(page,filepath)
-        # print(filepagelist)
-        ### Add page file list to complete list
-        completelist.append(filepagelist)
+            filepagelist=(page,filepath)
+            # print(filepagelist)
+            ### Add page file list to complete list
+            completelist.append(filepagelist)
     return(completelist)
 
 ### Replace pagestaker spans
@@ -47,9 +49,11 @@ def pgstakeregex(data):
     ### Define search and replace regexs
     search_text = r'<span class="com-rorohiko-pagestaker-style.*?">(\d+?|(x{0,3})(ix|iv|v?i{0,3})?)</span>'
     replace_text = lambda x:'<span epub:type="pagebreak" role="doc-pagebreak" id="page' + x.group(1) + '" title="' + x.group(1) + '" />'
+
     ### Run regex
-    data = re.sub(search_text, replace_text, data)
-    return(data)
+    newdata = re.sub(search_text, replace_text, data)
+    # print(newdata)
+    return(newdata)
     
 ### a function to grab page, turn it into an interger (unless it is a roman numeral), and then designate it as a sort key
 def sortby(x):
